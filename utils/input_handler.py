@@ -46,3 +46,15 @@ def get_user_selected_ingredients(filepath):
     selected_ingredients = [ingredient_names[i - 1] for i in selected_indices]
     return selected_ingredients
 
+
+def get_user_nutrient_requirements():
+    while True:
+        try:
+            cp_min = float(input("Enter minimum CP% (e.g., 16.0): "))
+            tdn_min = float(input("Enter minimum TDN% (e.g., 70.0): "))
+            total_weight = float(input("Enter total feed weight in kg (e.g., 1.0): "))
+            return cp_min, tdn_min, total_weight
+        except ValueError:
+            print("Invalid input. Please enter numeric values.")
+
+

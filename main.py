@@ -1,14 +1,12 @@
 from utils.data_loader import load_selected_ingredients
 from utils.optimizer_input import build_lp_components
 from scipy.optimize import linprog
-
+from utils.input_handler import get_user_selected_ingredients, get_user_nutrient_requirements
 
 
 def main():
-    selected = ["Elephant Grass", "Soybean Meal", "Rice Husk Bran", "Wheat Pollard"]
-    cp_min = 16.0
-    tdn_min = 70.0
-    total_weight = 1.0
+    selected = get_user_selected_ingredients("data/ingredients.csv")
+    cp_min, tdn_min, total_weight = get_user_nutrient_requirements()
 
     ingredients = load_selected_ingredients("data/ingredients.csv", selected)
     c, A_ub, b_ub, A_eq, b_eq = build_lp_components(ingredients, cp_min, tdn_min, total_weight)
