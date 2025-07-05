@@ -14,13 +14,16 @@ A terminal-based Python application for livestock feed formulation. This app hel
 - ✅ Input minimum CP% and TDN% requirements
 - ✅ Specify total feed weight (kg)
 - ✅ Automatically calculates the cheapest feed mix using `scipy.optimize.linprog`
-- ✅ Ensures all selected ingredients are utilized
-- ✅ Clean, readable result formatting
-- 🔜 Future plans: Export results to CSV / GUI interface
+- ✅ Ensures all selected ingredients are used at **minimum 1%** of the total feed
+- ✅ Warns user if nutrient targets exceed possible maximums based on selected ingredients
+- ✅ Clean, readable output in the terminal
+- ✅ Option to export results to **TXT** or **CSV**
+- 🔜 Future: GUI with Streamlit or Tkinter
 
 ---
 
 ## 🧱 Project Structure
+
 feed-formulation-app/
 │
 ├── data/
@@ -32,7 +35,8 @@ feed-formulation-app/
 ├── utils/
 │ ├── data_loader.py # Load and filter ingredient data
 │ ├── input_handler.py # Handle user input (ingredients + nutrients)
-│ └── optimizer_input.py # Build optimization matrices
+│ ├── optimizer_input.py # Build optimization matrices
+│ └── output_exporter.py # Export results to .txt or .csv
 │
 ├── main.py # Main script to run the app
 ├── requirements.txt # Python dependencies
@@ -56,10 +60,10 @@ scipy
 Run the app:
 python main.py
 
-Step-by-step flow:
-✅ View a list of available ingredients (from ingredients.csv)
+Step-by-step:
+✅ View a list of available ingredients from ingredients.csv
 
-🧠 Select ingredients by entering their numbers (e.g., 2, 5, 7)
+📋 Select ingredients by entering their numbers (e.g., 2,5,7)
 
 🧪 Enter nutrient requirements:
 
@@ -67,9 +71,13 @@ Minimum CP%
 
 Minimum TDN%
 
-Total feed weight in kilograms
+Total feed weight (in kg)
 
-📊 Get the optimal feed mix based on your inputs
+⚠️ If your requirements exceed what’s possible, you’ll be notified
+
+🧠 Get the optimal feed mix that meets requirements at the lowest cost
+
+📤 Optionally, export the result as .txt or .csv
 
 
 ## 📄 Data File Format
@@ -85,16 +93,27 @@ Ensure column headers are clean (no extra spaces).
 You can update or add new ingredients to this file.
 
 ## 📌 Notes
-The total feed weight must be in kg.
+Total feed weight is in kg
 
-The optimization ensures that the feed:
+Feed optimization:
 
-Meets or exceeds CP% and TDN% targets
+Must meet or exceed CP% and TDN% targets
 
-Uses only the ingredients you selected
+Uses only your selected ingredients
 
-Minimizes total cost
+Each ingredient must contribute at least 1% of total feed
 
-The program prevents solutions that use 0 kg of all but one ingredient.
+Goal is to minimize total cost
+
+The app will notify you if your nutrient targets are not feasible with your selection
 
 
+## 📤 Export Options
+
+After generating results, you’ll be prompted to export:
+
+.txt: Plain text summary
+
+.csv: Spreadsheet-friendly output
+
+Simply choose the format and provide a file name or path (e.g., output/result.txt or output/formula.csv).
