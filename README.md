@@ -4,116 +4,136 @@
 [![Built with Pandas](https://img.shields.io/badge/pandas-powered-lightgrey.svg)](https://pandas.pydata.org/)
 [![Optimization Engine](https://img.shields.io/badge/solver-scipy.optimize-orange)](https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.linprog.html)
 
-A terminal-based Python application for livestock feed formulation. This app helps users select feed ingredients and calculate the **optimal feed mix** that satisfies **minimum nutrient requirements** (Crude Protein and Total Digestible Nutrients) at the **lowest cost**, using **linear programming**.
+A feed formulation tool for livestock, built in Python.  
+The app calculates the **cheapest optimal feed mix** using linear programming, ensuring **minimum crude protein (CP%) and total digestible nutrients (TDN%)** are met — either via a **terminal interface** or a **Streamlit-based GUI**.
 
 ---
 
 ## 🚀 Features
 
 - ✅ Choose feed ingredients from a CSV file
-- ✅ Input minimum CP% and TDN% requirements
-- ✅ Specify total feed weight (kg)
-- ✅ Automatically calculates the cheapest feed mix using `scipy.optimize.linprog`
-- ✅ Ensures all selected ingredients are used at **minimum 1%** of the total feed
-- ✅ Warns user if nutrient targets exceed possible maximums based on selected ingredients
-- ✅ Clean, readable output in the terminal
-- ✅ Option to export results to **TXT** or **CSV**
-- 🔜 Future: GUI with Streamlit or Tkinter
+- ✅ Input minimum CP%, TDN%, and feed weight
+- ✅ Automatically calculates the lowest-cost feed formula using `scipy.optimize.linprog`
+- ✅ Ensures all selected ingredients are used at **minimum 1%** of total feed
+- ✅ Warns if nutrient targets exceed the potential of selected ingredients
+- ✅ Clean output formatting
+- ✅ Export results to **TXT** or **CSV**
+- ✅ Streamlit GUI for easier interaction
+- 🔄 Terminal (CLI) alternative for minimal setup
 
 ---
 
 ## 🧱 Project Structure
 
+```
 feed-formulation-app/
 │
 ├── data/
-│ └── ingredients.csv
+│   └── ingredients.csv
 │
 ├── models/
-│ └── ingredient.py # Ingredient class definition
+│   └── ingredient.py            # Ingredient class definition
 │
 ├── utils/
-│ ├── data_loader.py # Load and filter ingredient data
-│ ├── input_handler.py # Handle user input (ingredients + nutrients)
-│ ├── optimizer_input.py # Build optimization matrices
-│ └── output_exporter.py # Export results to .txt or .csv
+│   ├── data_loader.py           # Load and filter ingredient data
+│   ├── input_handler.py         # Handle user input (ingredients + nutrients)
+│   ├── optimizer_input.py       # Build optimization matrices
+│   └── output_exporter.py       # Export to TXT/CSV
 │
-├── main.py # Main script to run the app
-├── requirements.txt # Python dependencies
-└── README.md # You're here!
-
+├── app.py                       # ✅ Streamlit GUI interface
+├── cli_runner.py                # 🖥 Terminal-based version
+├── requirements.txt             # Dependency list
+└── README.md                    # You're here!
+```
 
 ---
 
 ## 📦 Requirements
 
-Install all required dependencies using:
+Install all dependencies:
+
+```bash
 pip install -r requirements.txt
+```
 
-Dependencies include:
-pandas
-scipy
-(Other modules like os, sys, etc. are built-in to Python.)
+Includes:
+- `numpy`
+- `pandas`
+- `scipy`
+- `streamlit`
 
+Other standard libraries (e.g., `os`, `sys`) are built into Python.
+
+---
 
 ## ▶️ How to Use
-Run the app:
-python main.py
+
+### 🔷 Option 1: Run with Streamlit (GUI)
+
+```bash
+streamlit run app.py
+```
+
+Features:
+- ✅ Select ingredients via checkboxes
+- ✅ Enter nutrient requirements interactively
+- ✅ View optimized feed results in a clean table
+- ✅ Export to `.csv` or `.txt`
+
+### 🔷 Option 2: Use the Terminal (CLI)
+
+```bash
+python cli_runner.py
+```
 
 Step-by-step:
-✅ View a list of available ingredients from ingredients.csv
 
-📋 Select ingredients by entering their numbers (e.g., 2,5,7)
+1. View all available ingredients from the `ingredients.csv`
+2. Select by entering numbers (e.g., `2, 5, 7`)
+3. Enter:
+   - Minimum CP%
+   - Minimum TDN%
+   - Total feed weight (kg)
+4. View optimized feed mix
+5. Optionally export as `.txt` or `.csv`
 
-🧪 Enter nutrient requirements:
-
-Minimum CP%
-
-Minimum TDN%
-
-Total feed weight (in kg)
-
-⚠️ If your requirements exceed what’s possible, you’ll be notified
-
-🧠 Get the optimal feed mix that meets requirements at the lowest cost
-
-📤 Optionally, export the result as .txt or .csv
-
+---
 
 ## 📄 Data File Format
-Your ingredients.csv must be in ;-separated format with columns like:
+
+Your `ingredients.csv` must be `;`-separated and contain these headers:
+
+```csv
 Ingredients;DM;CP %;TDN %;Price (In Indonesia rupiah per kg)
 Rice Husk Bran;89.3;13.8;81.0;300
 Wheat Pollard;88.1;13.2;86.0;4000
 Soybean Meal;87.6;46.9;83.2;6500
 ...
+```
 
-Important:
-Ensure column headers are clean (no extra spaces).
-You can update or add new ingredients to this file.
+⚠️ Tips:
+- Clean header names (no extra spaces)
+- Add/modify rows as needed
+
+---
 
 ## 📌 Notes
-Total feed weight is in kg
 
-Feed optimization:
+- Total feed weight is in **kg**
+- Nutrient constraints are **minimums**
+- Each ingredient is required to contribute at least **1% of total feed**
+- If your nutrient requirement is **too high**, the program will notify you
+- Optimization uses the `highs` method in `scipy.optimize.linprog`
 
-Must meet or exceed CP% and TDN% targets
-
-Uses only your selected ingredients
-
-Each ingredient must contribute at least 1% of total feed
-
-Goal is to minimize total cost
-
-The app will notify you if your nutrient targets are not feasible with your selection
-
+---
 
 ## 📤 Export Options
 
-After generating results, you’ll be prompted to export:
+After solving:
 
-.txt: Plain text summary
+- `.txt`: Plain text summary (easy to read/share)
+- `.csv`: Spreadsheet-compatible format (for Excel, Google Sheets)
 
-.csv: Spreadsheet-friendly output
-
-Simply choose the format and provide a file name or path (e.g., output/result.txt or output/formula.csv).
+You'll be prompted to:
+- Choose format
+- Enter file name or path (e.g., `output/formula.txt`)

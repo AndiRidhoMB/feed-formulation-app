@@ -58,3 +58,12 @@ def get_user_nutrient_requirements():
             print("Invalid input. Please enter numeric values.")
 
 
+
+def get_available_ingredient_names(filepath):
+    import pandas as pd
+    df = pd.read_csv(filepath, sep=";", engine="python")
+    df.columns = df.columns.str.strip()
+    return df["Ingredients"].tolist()
+
+
+
