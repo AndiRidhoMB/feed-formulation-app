@@ -16,19 +16,14 @@ ENV/
 .DS_Store
 Thumbs.db
 
-# Jupyter notebook checkpoints (if used)
-.ipynb_checkpoints/
-
-# Output files (optional: exclude if you export results)
-*.csv
-*.txt
-*.log
-
 # Python cache & build artifacts
 build/
 dist/
 *.egg-info/
 
-# Demo media
-/demo/*.gif
-/demo/*.mp4
+# Jupyter notebook checkpoints (if used)
+.ipynb_checkpoints/
+
+# Demo media (optional, only if you include GIF/MP4 for docs)
+demo/*.gif
+demo/*.mp4
